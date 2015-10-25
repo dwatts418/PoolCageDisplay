@@ -1,0 +1,146 @@
+#include <Adafruit_NeoPixel.h>
+
+//Pins
+#define YELLOWPIN 6
+#define GREENPIN 5
+
+
+//Define strip objects
+Adafruit_NeoPixel stripYellow = Adafruit_NeoPixel(110, YELLOWPIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel stripGreen = Adafruit_NeoPixel(112, GREENPIN, NEO_GRB + NEO_KHZ800);
+
+void setup() {
+  stripYellow.begin();
+  stripGreen.begin();
+  stripYellow.show(); // Initialize all Yellow strip pixels to 'off'
+  stripGreen.show(); // Initialize all pixels Green strip to 'off'
+  
+  //setEntireYellowStrip(stripYellow.Color(255, 0, 0));
+  //setEntireGreenStrip(stripGreen.Color(0, 255, 0));
+  
+  delay(100);
+}
+
+void loop() {
+  //presetOne();
+  //delay(20000);
+  //presetTwo();
+  //delay(20000);
+  //presetThree();
+  //delay(20000);
+  //presetFour();
+  //delay(20000);
+  rainbowCycleYellow(20);
+  rainbowCycleGreen(20);
+  
+}
+
+// Preset One- RED/ RED
+void presetOne() {
+  //stripYellow.show();  // Clear strip
+  uint16_t x, m;
+  for (int x=0; x < stripYellow.numPixels(); x++) {
+    stripYellow.setPixelColor(x, 100, 0, 0);
+  }
+  stripYellow.show();
+  
+  delay(50);
+  
+  for (int m=0; m < stripGreen.numPixels(); m++) {
+    stripGreen.setPixelColor(m, 100, 0, 0);
+  }
+  stripGreen.show();
+}
+
+// Preset Two- GREEN/ RED
+void presetTwo() {
+  //stripYellow.show();  // Clear strip
+  uint16_t i, m;
+  for (int i=0; i < stripYellow.numPixels(); i++) {
+    stripYellow.setPixelColor(i, 0, 100, 0);
+  }
+  stripYellow.show();
+  
+  delay(50);
+  
+  //stripGreen.show();  // Clear strip
+  for (int m=0; m < stripGreen.numPixels(); m++) {
+    stripGreen.setPixelColor(m, 100, 0, 0);
+  }
+  stripGreen.show();
+}
+
+// Preset Three- BLUE/ BLUE
+void presetThree() {
+  //stripYellow.show();  // Clear strip
+  uint16_t k, m;
+  for (int k=0; k < stripYellow.numPixels(); k++) {
+    stripYellow.setPixelColor(k, 0, 0, 100);
+  }
+  stripYellow.show();
+  
+  delay(50);
+  
+  //stripGreen.show();  // Clear strip
+  for (int m=0; m < stripGreen.numPixels(); m++) {
+    stripGreen.setPixelColor(m, 0, 0, 100);
+  }
+  stripGreen.show();
+}
+
+// Preset FOUR- GREEN/ RED
+void presetFour() {
+  //stripYellow.show();  // Clear strip
+  uint16_t k, m;
+  for (int k=0; k < stripYellow.numPixels(); k++) {
+    stripYellow.setPixelColor(k, 100, 0, 0);
+  }
+  stripYellow.show();
+  
+  delay(50);
+  
+  //stripGreen.show();  // Clear strip
+  for (int m=0; m < stripGreen.numPixels(); m++) {
+    stripGreen.setPixelColor(m, 0, 100, 0);
+  }
+  stripGreen.show();
+}
+
+
+// Slightly different, this makes the rainbow equally distributed throughout
+void rainbowCycleYellow(uint8_t wait) {
+  uint16_t i, j;
+  for(j=0; j<256*5; j++) { // 5 cycles of all colors on wheel
+    for(i=0; i< stripYellow.numPixels(); i++) {
+      stripYellow.setPixelColor(i, Wheel(((i * 101 / stripYellow.numPixels()) + j) & 100));
+    }
+    stripYellow.show();
+    delay(wait);
+  }
+}
+
+// Slightly different, this makes the rainbow equally distributed throughout
+void rainbowCycleGreen(uint8_t wait) {
+  uint16_t i, j;
+  for(j=0; j<256*5; j++) { // 5 cycles of all colors on wheel
+    for(i=0; i< stripGreen.numPixels(); i++) {
+      stripGreen.setPixelColor(i, Wheel(((i * 101 / stripGreen.numPixels()) + j) & 100));
+    }
+    stripGreen.show();
+    delay(wait);
+  }
+}
+
+// Input a value 0 to 255 to get a color value.
+// The colours are a transition r - g - b - back to r.
+uint32_t Wheel(byte WheelPos) {
+  if(WheelPos < 85) {
+   return stripYellow.Color(WheelPos * 3, 100 - WheelPos * 3, 0);
+  } else if(WheelPos < 170) {
+   WheelPos -= 85;
+   return stripYellow.Color(100 - WheelPos * 3, 0, WheelPos * 3);
+  } else {
+   WheelPos -= 170;
+   return stripYellow.Color(0, WheelPos * 3, 100 - WheelPos * 3);
+  }
+}
